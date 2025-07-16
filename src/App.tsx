@@ -5,8 +5,9 @@ import { Input } from './components/ui/input'
 import { Textarea } from './components/ui/textarea'
 import { Label } from './components/ui/label'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './components/ui/collapsible'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './components/ui/dropdown-menu'
 import { Toaster } from './components/ui/toaster'
-import { ChevronDown, Sparkles, Wand2 } from 'lucide-react'
+import { ChevronDown, Sparkles, Wand2, User, LogOut } from 'lucide-react'
 import { PromptTypeSelector } from './components/PromptTypeSelector'
 import { ParameterControls } from './components/ParameterControls'
 import { GeneratedPromptDisplay } from './components/GeneratedPromptDisplay'
@@ -156,6 +157,14 @@ function App() {
     })
   }
 
+  const handleLogout = () => {
+    blink.auth.logout()
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out",
+    })
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -190,14 +199,35 @@ function App() {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center mb-4">
-            <Sparkles className="h-8 w-8 text-primary mr-3" />
-            <h1 className="text-4xl font-bold text-foreground">AI Prompt Generator</h1>
+        <div className="relative mb-8">
+          {/* User Menu */}
+          <div className="absolute top-0 right-0">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  <span className="hidden sm:inline">{user.email}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Generate creative and effective prompts for AI models, chatbots, and creative writing tasks
-          </p>
+
+          {/* Title and Description */}
+          <div className="text-center">
+            <div className="flex items-center justify-center mb-4">
+              <Sparkles className="h-8 w-8 text-primary mr-3" />
+              <h1 className="text-4xl font-bold text-foreground">AI Prompt Generator</h1>
+            </div>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Generate creative and effective prompts for AI models, chatbots, and creative writing tasks
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
